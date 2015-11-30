@@ -1,0 +1,23 @@
+* {
+	margin: 0;
+	padding: 0;
+	cursor: default;
+}
+
+body {
+	overflow: auto;
+	max-height: 100vh;
+}
+
+body::-webkit-scrollbar {
+	width: 0;
+	height: 0;
+}
+
+img {
+	float: left;
+}
+
+img:hover {
+	opacity: .7;
+}
