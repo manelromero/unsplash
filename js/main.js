@@ -13,7 +13,7 @@ $.getJSON('https://unsplash.it/list', function(data) {
 	});
 }).done(function() {
 	picturesLength = Object.keys(pictures).length;
-	drawPictures(24);
+	drawPictures(3);
 });
 
 $(window).scroll(function() {
@@ -21,7 +21,7 @@ $(window).scroll(function() {
 });
 
 function drawPictures(x) {
-	for (i=0; i<=x-1; i++) {
+	for (var i = 0; i <= x - 1; i++) {
 		var picture = generateRandom();
 		var img = '<a href="' + pictures[picture].post_url + '" target="_blank"><img class="jander" id="image' + i + '" src="http://www.unsplash.it/' + amp + '/' + alt + '?image=' + pictures[picture].id + '"></a>'
 		document.getElementById('container').innerHTML += img;
