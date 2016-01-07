@@ -1,1 +1,3 @@
-Check randomly all pictures from unsplash.com
+# Unsplash
+
+Simple page for randomly check all featured pictures from unsplash.com

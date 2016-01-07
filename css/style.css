@@ -14,10 +14,33 @@ body::-webkit-scrollbar {
 	height: 0;
 }
 
+.picture {
+	position: relative;
+	float: left;
+}
+
 img {
 	float: left;
 }
 
-img:hover {
-	opacity: .7;
+a {
+	color: #ddd;
+}
+
+.author {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	padding: 1rem;
+	top: 0;
+	left: 0;
+	opacity: 0;
+	font: normal 1rem Courier, monospace;
+	background: linear-gradient(top, rgba(0,0,0,.5) 0%,rgba(0,0,0,.2) 20%,rgba(0,0,0,0) 100%);
+	background: -webkit-linear-gradient(top, rgba(0,0,0,.5) 0%,rgba(0,0,0,.2) 20%,rgba(0,0,0,0) 100%);
+	background: -moz-linear-gradient(top, rgba(0,0,0,.5) 0%,rgba(0,0,0,.2) 20%,rgba(0,0,0,0) 100%);
+}
+
+.author:hover {
+	opacity: 1;
 }
