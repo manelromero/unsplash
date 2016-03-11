@@ -1,6 +1,7 @@
 * {
 	margin: 0;
 	padding: 0;
+  box-sizing: border-box;
 	cursor: default;
 }
 
@@ -14,17 +15,17 @@ body::-webkit-scrollbar {
 	height: 0;
 }
 
-.picture {
-	position: relative;
-	float: left;
-}
-
 img {
 	float: left;
 }
 
 a {
 	color: #ddd;
+}
+
+.picture {
+	position: relative;
+	float: left;
 }
 
 .author {
@@ -35,7 +36,7 @@ a {
 	top: 0;
 	left: 0;
 	opacity: 0;
-	font: normal 1rem Courier, monospace;
+	font: normal 3rem Courier, monospace;
 	background: linear-gradient(top, rgba(0,0,0,.5) 0%,rgba(0,0,0,.2) 20%,rgba(0,0,0,0) 100%);
 	background: -webkit-linear-gradient(top, rgba(0,0,0,.5) 0%,rgba(0,0,0,.2) 20%,rgba(0,0,0,0) 100%);
 	background: -moz-linear-gradient(top, rgba(0,0,0,.5) 0%,rgba(0,0,0,.2) 20%,rgba(0,0,0,0) 100%);
@@ -43,4 +44,10 @@ a {
 
 .author:hover {
 	opacity: 1;
+}
+
+@media only screen and (min-width: 768px) {
+	.author {
+		font: normal 1rem Courier, monospace;
+	}
 }

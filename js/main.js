@@ -1,60 +1,66 @@
-var amp = window.innerWidth / 3,
-		alt = window.innerHeight / 3,
-		pictures = {},
-		picturesLength = 0;
+'use strict';
 
-$.getJSON('https://unsplash.it/list', function(data) {
-	$.each(data, function(key) {
-		pictures[key] = {
-			id: data[key].id,
-			author: data[key].author.substring(0, data[key].author.length / 2),
-			post_url: data[key].post_url
-		};
-	});
-}).done(function() {
-	picturesLength = Object.keys(pictures).length;
+var windowWidth = window.innerWidth / 3,
+		innerHeight = window.innerHeight,
+		windowHeight = innerHeight / 3,
+		pictures = {},
+		picturesLength = 0,
+		pic,
+		id,
+		img;
+
+$.ajax({
+	url: 'https://unsplash.it/list',
+	dataType: 'json'
+}).done(function(response) {
+	pictures = response;
+	picturesLength = pictures.length;
 	drawPictures(12);
 });
 
-// $(window).scroll(function() {
-// 	drawPictures(3);
-// });
-
 function drawPictures(numberOfPictures) {
-	if (numberOfPictures > 0) {
-		var picture = generateRandom();
-		var img = new Image();
-		img.onload = function() {
-			numberOfPictures--;
-			// Create author div
-			var author = document.createElement('div');
-			author.className = 'author';
-			author.innerHTML = (pictures[picture].author);
-			// Create link
-			var link = document.createElement('a');
-			link.href = pictures[picture].post_url;
-			link.target = '_blank';
-			link.appendChild(img);
-			link.appendChild(author);
-			// Create picture div
-			var divLink = document.createElement('div');
-			divLink.className = 'picture';
-			divLink.appendChild(link);
-			// Add to the document
-			document.getElementById('container').appendChild(divLink);
-			delete pictures[picture];
-			requestAnimationFrame(function() {
-				drawPictures(numberOfPictures);
-			});
-		};
-		img.src = 'http://www.unsplash.it/' + amp + '/' + alt + '?image=' + pictures[picture].id;
-	}
+	if (numberOfPictures <= 0) return;
+	// Generate random number from remaining pictures
+	id = generateRandom();
+	// Variables for adding DOM elements
+	var $div = $('<div></div>');
+	var $a = $('<a></a>');
+	var $p = $('<p></p>');
+
+	img = new Image();
+	img.src = 'http://www.unsplash.it/' + windowWidth + '/' + windowHeight + '?image=' + pictures[id].id;
+
+	img.onload = function() {
+		numberOfPictures--;
+		// Create author p
+		console.log(id)
+		$p.text(pictures[id].author).addClass('author');
+		// Create link
+		$a.attr({'href': pictures[id].post_url, 'target': '_blank'});
+		$a.append(img, $p);
+		// Create picture div
+		$div.append($a).addClass('picture');
+		// Add to the document
+		$('#container').append($div);
+		// Delete the picture from the Array
+		delete pictures[id];
+		requestAnimationFrame(function() {
+			drawPictures(numberOfPictures);
+		});
+	};
 
 }
 
 function generateRandom() {
 	while (typeof pictures[pic] === 'undefined') {
-		var pic = Math.floor((Math.random() * picturesLength) + 1);
+		pic = Math.floor((Math.random() * picturesLength) + 1);
 	}
 	return pic;
 }
+
+window.onscroll = function() {
+ 	var position = $('body').scrollTop() + innerHeight,
+ 			height = $(document).height();
+
+ 	if (position >= height) drawPictures(9);
+};
