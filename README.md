@@ -12,4 +12,4 @@ Simple page for checking featured pictures from [unsplash.com](https://unsplash.
 
 * You get a clear 3 x 3 pictures full screen presentation with no distractions.
 * Pictures have a random order, so you don't see everytime the same pictures in the same order.
-* You can click in any picture and a its unsplash.com window will open so you can check its details, stats, favorite and download it.
+* You can click in any picture and its unsplash.com window will open so you can check its details, stats, favorite and download it.

@@ -5,9 +5,9 @@ var windowWidth = window.innerWidth / 3,
 		windowHeight = innerHeight / 3,
 		pictures = {},
 		picturesLength = 0,
-		pic,
 		id,
-		img;
+		img,
+		scrollControl = true;
 
 $.ajax({
 	url: 'https://unsplash.it/list',
@@ -20,7 +20,9 @@ $.ajax({
 
 function drawPictures(numberOfPictures) {
 
-	if (numberOfPictures <= 0) return;
+	// Check if the array is empty to stop
+	if (pictures[0] == null) return;
+	if (numberOfPictures < 0) return;
 
 	// Generate random number from remaining pictures
 	id = generateRandom();
@@ -34,6 +36,7 @@ function drawPictures(numberOfPictures) {
 
 	img.onload = function() {
 		numberOfPictures--;
+		if (numberOfPictures === 0) scrollControl = false;
 		// Create author p
 		$p.text(pictures[id].author).addClass('author');
 		// Create link
@@ -44,8 +47,8 @@ function drawPictures(numberOfPictures) {
 		// Add to the document
 		$('#container').append($div);
 		// Delete the picture from the Array
-		console.log(id);
-		delete pictures[id];
+		pictures.splice(id, 1);
+		picturesLength = pictures.length;
 		requestAnimationFrame(function() {
 			drawPictures(numberOfPictures);
 		});
@@ -54,15 +57,18 @@ function drawPictures(numberOfPictures) {
 }
 
 function generateRandom() {
-	while (typeof pictures[pic] === 'undefined') {
-		pic = Math.floor((Math.random() * picturesLength) + 1);
-	}
-	return pic;
+	return Math.floor(Math.random() * picturesLength);
 }
 
-window.onscroll = function() {
+$(window).scroll(function() {
+
+	if (scrollControl) return;
+
  	var position = $('body').scrollTop() + innerHeight,
  			height = $(document).height();
 
- 	if (position > height - windowHeight) drawPictures(9);
-};
+ 	if (position > height - windowHeight) {
+ 		scrollControl = true;
+ 		drawPictures(9);
+ 	}
+});
