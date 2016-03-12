@@ -19,7 +19,9 @@ $.ajax({
 });
 
 function drawPictures(numberOfPictures) {
+
 	if (numberOfPictures <= 0) return;
+
 	// Generate random number from remaining pictures
 	id = generateRandom();
 	// Variables for adding DOM elements
@@ -33,7 +35,6 @@ function drawPictures(numberOfPictures) {
 	img.onload = function() {
 		numberOfPictures--;
 		// Create author p
-		console.log(id)
 		$p.text(pictures[id].author).addClass('author');
 		// Create link
 		$a.attr({'href': pictures[id].post_url, 'target': '_blank'});
@@ -43,6 +44,7 @@ function drawPictures(numberOfPictures) {
 		// Add to the document
 		$('#container').append($div);
 		// Delete the picture from the Array
+		console.log(id);
 		delete pictures[id];
 		requestAnimationFrame(function() {
 			drawPictures(numberOfPictures);
@@ -62,5 +64,5 @@ window.onscroll = function() {
  	var position = $('body').scrollTop() + innerHeight,
  			height = $(document).height();
 
- 	if (position >= height) drawPictures(9);
+ 	if (position > height - windowHeight) drawPictures(9);
 };
