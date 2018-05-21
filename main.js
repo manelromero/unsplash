@@ -1,24 +1,40 @@
-const PICTURE_LIST_URL = 'https://unsplash.it/list';
-const API_URL = 'http://www.unsplash.it/';
-const container = document.querySelector('#container');
+const PICTURE_LIST_URL = 'https://picsum.photos/list';
+const API_URL = 'https://picsum.photos/';
+
 const pictureWidth = window.innerWidth / 3;
-const innerHeight = window.innerHeight;
-const pictureHeight = innerHeight / 3;
+const pictureHeight = window.innerHeight / 3;
+
+const container = document.querySelector('#container');
+let fetching = false;
 let pictureList = [];
 
-const fetchPictureList = () => {
-  return fetch(PICTURE_LIST_URL).then(response => response.json());
+window.addEventListener('scroll', async () => {
+  const containerHeight = container.offsetHeight;
+  const bottomPosition = window.scrollY + innerHeight;
+
+  if (bottomPosition >= containerHeight) {
+    if (!fetching) {
+      fetching = true;
+      await renderPictures(3);
+      fetching = false;
+    }
+  }
+});
+
+const fetchPictureList = () =>
+  fetch(PICTURE_LIST_URL).then(response => response.json());
+
+const main = async () => {
+  pictureList = await fetchPictureList();
+  renderPictures(9);
 };
 
-const mainControl = async () => {
-  pictureList = await fetchPictureList();
+main();
 
-  const pictures = getPictures(12);
-
+const renderPictures = amount => {
+  const pictures = getPictures(amount);
   drawPictures(pictures);
 };
-
-mainControl();
 
 const getPictures = amount => {
   let pictures = [];
@@ -42,33 +58,19 @@ const chosePicture = () => {
   return picture;
 };
 
-const removePicture = id => {
-  pictureList.splice(id, 1);
-};
+const removePicture = id => pictureList.splice(id, 1);
 
-const draw = picture => {
+const drawPictures = pictures => pictures.map(picture => draw(picture));
+
+const draw = async picture => {
   const { author: authorName, id, post_url: url } = picture;
 
   const link = createLink(url);
-  const image = createImage(id);
+  const image = await createImage(id);
   const author = createAuthor(authorName);
 
   link.append(image, author);
   container.append(link);
-};
-
-const drawPictures = pictures => {
-  pictures.map(picture => draw(picture));
-};
-
-const generateRandom = max => Math.floor(Math.random() * max);
-
-const createAuthor = authorName => {
-  const p = document.createElement('p');
-
-  p.className = 'author';
-  p.innerHTML = authorName;
-  return p;
 };
 
 const createLink = url => {
@@ -84,26 +86,20 @@ const createLink = url => {
 const createImage = pictureId => {
   const imageUrl =
     API_URL + pictureWidth + '/' + pictureHeight + '?image=' + pictureId;
-  const image = new Image();
 
-  image.src = imageUrl;
-
-  return image;
+  return new Promise(resolve => {
+    const image = new Image();
+    image.src = imageUrl;
+    image.onload = () => resolve(image);
+  });
 };
 
-window.addEventListener('scroll', () => {
-  const position = document.body.scrollTop + innerHeight;
-  console.log(position);
-});
+const createAuthor = authorName => {
+  const paragraph = document.createElement('p');
 
-// $(window).scroll(function() {
-//   if (scrollControl) return;
+  paragraph.className = 'author';
+  paragraph.innerHTML = authorName;
+  return paragraph;
+};
 
-//   var position = $('body').scrollTop() + innerHeight,
-//     height = $(document).height();
-
-//   if (position > height - windowHeight) {
-//     scrollControl = true;
-//     drawPictures(2);
-//   }
-// });
+const generateRandom = max => Math.floor(Math.random() * max);

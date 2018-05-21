@@ -23,6 +23,10 @@ a {
 	color: #ddd;
 }
 
+.container {
+	display: inline-block;
+}
+
 .picture {
 	position: relative;
 	float: left;
